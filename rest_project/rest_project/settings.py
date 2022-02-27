@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'library',
     'authors',
     'users',
+    'todo',
 ]
 
 MIDDLEWARE = [
