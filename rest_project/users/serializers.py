@@ -9,6 +9,7 @@ class CustomUserModelSerializer(HyperlinkedModelSerializer):
                   'last_name', 
                   'birthday_year', 
                   'email', 
+                  'date_joined',
                   'is_active',
                   'is_staff',
                 #   'is_superuser' 

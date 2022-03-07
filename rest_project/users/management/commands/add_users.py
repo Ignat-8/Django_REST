@@ -12,6 +12,6 @@ from users.models import CustomUser
 
 class Command(BaseCommand):
     # Создаем суперпользователя при помощи менеджера модели
-    super_user = CustomUser.objects.create_superuser('admin', '', '2000', 'admin@localhost', 'adminadmin')
+    super_user = CustomUser.objects.create_superuser('admin', 'adminadmin', '2000', 'admin@localhost', 'adminadmin')
     user1 = CustomUser.objects.create_user('user1', 'user1user1', '2001', 'user1@localhost', 'user1user1')
     user2 = CustomUser.objects.create_user('user2', 'user2user2', '2002', 'user2@localhost', 'user2user2')

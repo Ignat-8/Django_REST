@@ -49,7 +49,7 @@ class App extends React.Component {
         </div>
         <div>
           <p><b>Таблица пользователей</b></p>
-          <UserList users={this.state.users} />
+          {/* <UserList users={this.state.users} /> */}
         </div>
         <div>
           <p>_________________________________________________________</p>

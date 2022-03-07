@@ -14,22 +14,33 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from posixpath import basename
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-# from authors.views import AuthorModelViewSet
 from users.views import CustomUserModelViewSet
-from todo.views import TodoModelViewSet, ProjectModelViewSet
+from todo.views import MyProjectViewSet ,MyTodoViewSet
+from todo.views import ProjectListAPIView ,ProjectFilterView ,ProjectGetAPIView 
+from todo.views import ProjectCreateAPIView ,ProjectDeleteAPIView ,ProjectUpdateAPIView
 
 
 router = DefaultRouter()
-# router.register('authors', AuthorModelViewSet)
 router.register('users', CustomUserModelViewSet)
-router.register('projects', ProjectModelViewSet)
-router.register('todos', TodoModelViewSet)
+router.register('projects', MyProjectViewSet)
+router.register('todos', MyTodoViewSet, basename='todos')
+
 
 urlpatterns = [
-path('admin/', admin.site.urls),
-path('api-auth/', include('rest_framework.urls')),
-path('api/', include(router.urls)),
+    path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include(router.urls)),
+    # path('api-view/projects/v1', ProjectAPIView.as_view()),
+    # path('api-view/projects/v2', ProjectListAPIView.as_view()),
+    # path('api-view/projects/v3', MyProjectViewSet.as_view({'get': 'list'})),
+    # path('api-view/projects/v3/<int:pk>', MyProjectViewSet.as_view({'get':'retrieve'})),
+    # path('api-view/projects/<str:name>/', ProjectFilterView.as_view()),
+    # path('api-view/project/<int:pk>', ProjectGetAPIView.as_view()),
+    # path('api-view/project/create', ProjectCreateAPIView.as_view()),
+    # path('api-view/project/delete/<int:pk>', ProjectDeleteAPIView.as_view()),
+    # path('api-view/project/update/<int:pk>', ProjectUpdateAPIView.as_view()),
 ]
