@@ -14,4 +14,4 @@ class CursorSetPagination(CursorPagination):
 class CustomUserModelViewSet(ListModelMixin ,RetrieveModelMixin ,UpdateModelMixin ,GenericViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserModelSerializer
-    pagination_class = CursorSetPagination
+    # pagination_class = CursorSetPagination

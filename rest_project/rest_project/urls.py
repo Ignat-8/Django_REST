@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from users.views import CustomUserModelViewSet
-from todo.views import MyProjectViewSet ,MyTodoViewSet
+from todo.views import MyProjectViewSet ,MyTodoViewSet ,ProjectModelViewSet ,TodoModelViewSet
 from todo.views import ProjectListAPIView ,ProjectFilterView ,ProjectGetAPIView 
 from todo.views import ProjectCreateAPIView ,ProjectDeleteAPIView ,ProjectUpdateAPIView
 
@@ -27,8 +27,9 @@ from todo.views import ProjectCreateAPIView ,ProjectDeleteAPIView ,ProjectUpdate
 router = DefaultRouter()
 router.register('users', CustomUserModelViewSet)
 router.register('projects', MyProjectViewSet)
-router.register('todos', MyTodoViewSet, basename='todos')
-
+# router.register('projects', ProjectModelViewSet)
+# router.register('todos', MyTodoViewSet, basename='todos')
+router.register('todos', TodoModelViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

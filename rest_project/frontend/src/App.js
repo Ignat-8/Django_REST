@@ -1,11 +1,22 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import ProjectList from './components/project.js';
-import UserList from './components/user.js';
-import TodoList from './components/todo.js';
+import ProjectsList from './components/projects.js';
+import ProjectDescr from './components/projectdescr.js';
+import UsersList from './components/users.js';
+import TodosList from './components/todos.js';
 import axios from 'axios';
+import { HashRouter, BrowserRouter, Route, Routes, Link, useLocation } from 'react-router-dom';
 
+
+const NotFound = () => {
+  let location = useLocation()
+  return (
+    <div>
+      Page {location.pathname} not found
+    </div>
+  )
+}
 
 class App extends React.Component {
   constructor(props) {
@@ -45,25 +56,20 @@ class App extends React.Component {
       <div>
         <div>Menu</div>
         <div>
-          <p>_________________________________________________________</p>
-        </div>
-        <div>
-          <p><b>Таблица пользователей</b></p>
-          {/* <UserList users={this.state.users} /> */}
-        </div>
-        <div>
-          <p>_________________________________________________________</p>
-        </div>
-        <div>
-          <p><b>Таблица проектов</b></p>
-          {/* <ProjectList projects={this.state.projects} /> */}
-        </div>
-        <div>
-          <p>_________________________________________________________</p>
-        </div>
-        <div>
-          <p><b>Таблица todo</b></p>
-          {/* <TodoList todos={this.state.todos} /> */}
+          <BrowserRouter>
+            <nav>
+              <li><Link to='/'>Users</Link></li>
+              <li><Link to='/projects'>Projects</Link></li>
+              <li><Link to='/todos'>Todos</Link></li>
+            </nav><br></br>
+            <Routes>
+              <Route exact path='/' element={<UsersList users={this.state.users} />} />
+              <Route exact path='/projects' element={<ProjectsList projects={this.state.projects} />} />
+              <Route path='/projects/:id' element={<ProjectDescr todos={this.state.todos} />} />
+              <Route exact path='/todos' element={<TodosList todos={this.state.todos} />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
         </div>
         <div>
           <p>_________________________________________________________</p>

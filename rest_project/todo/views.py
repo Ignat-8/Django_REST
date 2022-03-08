@@ -7,7 +7,8 @@ from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework import generics 
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin , UpdateModelMixin ,CreateModelMixin ,DestroyModelMixin
-from rest_framework.pagination import CursorPagination
+# from rest_framework.pagination import CursorPagination
+from django_filters import rest_framework as filters
 from .models import Project, Todo
 from .serializers import TodoModelSerializer, ProjectModelSerializer
 from .serializers import MyTodoModelSerializer, MyProjectModelSerializer
@@ -81,9 +82,9 @@ class ProjectUpdateAPIView(generics.UpdateAPIView):
     serializer_class = ProjectModelSerializer
 
 
-class ProjectSetPagination(CursorPagination):
-    page_size = 1
-    ordering = '-name'
+# class ProjectSetPagination(CursorPagination):
+#     page_size = 1
+#     ordering = '-name'
 
 # наличие этих классов определяет возможность редактирования, создания и т.п.
 # ListModelMixin, RetrieveModelMixin , UpdateModelMixin ,CreateModelMixin ,DestroyModelMixin
@@ -91,7 +92,7 @@ class MyProjectViewSet(ListModelMixin, RetrieveModelMixin , UpdateModelMixin ,Cr
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = Project.objects.all()
     serializer_class = ProjectModelSerializer
-    pagination_class = ProjectSetPagination
+    # pagination_class = ProjectSetPagination
 
     @action(detail=True, methods=['get'])
     def project_name_only(self, request, pk=None):
@@ -99,17 +100,36 @@ class MyProjectViewSet(ListModelMixin, RetrieveModelMixin , UpdateModelMixin ,Cr
         return Response({'project.name': project.name})
 
 
-class TodoSetPagination(CursorPagination):
-    page_size = 5
-    ordering = '-project_id'
+# class TodoSetPagination(CursorPagination):
+#     page_size = 5
+#     ordering = '-project_id'
+
+
+class TodoFilter(filters.FilterSet):
+    date_from = filters.DateFilter(field_name="date_created", lookup_expr='gte')
+    date_to = filters.DateFilter(field_name="date_created", lookup_expr='lte')
+
+    class Meta:
+        model = Todo
+        fields = ['date_created']
 
 
 class MyTodoViewSet(ListModelMixin, RetrieveModelMixin , UpdateModelMixin ,CreateModelMixin ,DestroyModelMixin ,GenericViewSet):
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
     queryset = Todo.objects.all()
     serializer_class = TodoModelSerializer
-    pagination_class = TodoSetPagination
+    # pagination_class = TodoSetPagination
+    filterset_class = TodoFilter
 
+    # http://localhost:8000/api/todos/?date_from=2022.03.01&date_to=2022.03.05
+    # def get_queryset(self):
+    #     queryset = Todo.objects.all()
+    #     date_from = self.request.query_params.get('date_from', None)
+    #     date_to = self.request.query_params.get('date_to', None)
+    #     if date_from and date_to:
+    #         queryset = queryset.filter(date_created__gt=date_from, date_created__lt=date_to)
+    #     return queryset
+        
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.is_active = False
@@ -118,12 +138,12 @@ class MyTodoViewSet(ListModelMixin, RetrieveModelMixin , UpdateModelMixin ,Creat
 
 
 #-----------------------------------------------------------------------------
-# class ProjectModelViewSet(ModelViewSet):
-#     queryset = Project.objects.all()
-#     serializer_class = ProjectModelSerializer
+class ProjectModelViewSet(ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectModelSerializer
+    
 
-
-# class TodoModelViewSet(ModelViewSet):
-#     queryset = Todo.objects.all()
-#     serializer_class = TodoModelSerializer
-#     pagination_class = TodoSetPagination
+class TodoModelViewSet(ModelViewSet):
+    queryset = Todo.objects.all()
+    serializer_class = TodoModelSerializer
+    
