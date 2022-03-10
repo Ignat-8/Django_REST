@@ -1,3 +1,4 @@
+from enum import unique
 from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
 from .models import Todo, Project
 from users.serializers import CustomUserModelSerializer
