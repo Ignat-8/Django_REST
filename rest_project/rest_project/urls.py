@@ -30,8 +30,8 @@ router = DefaultRouter()
 router.register('users', CustomUserModelViewSet)
 router.register('projects', MyProjectViewSet)
 # router.register('projects', ProjectModelViewSet)
-# router.register('todos', MyTodoViewSet, basename='todos')
-router.register('todos', TodoModelViewSet)
+router.register('todos', MyTodoViewSet, basename='todos')
+# router.register('todos', TodoModelViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

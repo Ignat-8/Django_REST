@@ -5,6 +5,7 @@ import ProjectsList from './components/projects.js';
 import ProjectDescr from './components/projectdescr.js';
 import UsersList from './components/users.js';
 import TodosList from './components/todos.js';
+import LoginForm from './components/LoginForm.js';
 import axios from 'axios';
 import { HashRouter, BrowserRouter, Route, Routes, Link, useLocation } from 'react-router-dom';
 
@@ -24,15 +25,30 @@ class App extends React.Component {
     this.state = {
       'users': [],
       'projects': [],
-      'todos': []
+      'todos': [],
+      'token': ''
     }
   }
 
-  componentDidMount() {
+  isAuth() {
+    return !!this.state.token
+  }
+
+  getHeader() {
+    if (this.isAuth()) {
+      return {
+        'Authorization': 'Token ' + this.state.token
+      }
+    }
+    return {}
+  }
+
+  getData() {
+    let headers = this.getHeader()
     axios.all(
-      [axios.get('http://127.0.0.1:8000/api/users/'),
-      axios.get('http://127.0.0.1:8000/api/projects/'),
-      axios.get('http://127.0.0.1:8000/api/todos/')])
+      [axios.get('http://127.0.0.1:8000/api/users/', { headers }),
+      axios.get('http://127.0.0.1:8000/api/projects/', { headers }),
+      axios.get('http://127.0.0.1:8000/api/todos/', { headers })])
       .then(axios.spread((users_, project_, todo_) => {
         const users = users_.data
         const projects = project_.data
@@ -48,7 +64,54 @@ class App extends React.Component {
           'todos': todos
         })
       }))
-      .catch(error => console.log(error));
+      .catch(
+        error => {
+          console.log('get_data_error=', error);
+          if (error == 'Error: Request failed with status code 401') {
+            console.log(this.isAuth());
+            this.setState({ 'token': '' });
+          }
+        }
+      );
+  }
+
+  get_token(login, password) {
+    axios
+      .post('http://127.0.0.1:8000/api-token-auth/', { 'username': login, 'password': password })
+      .then(response => {
+        const token = response.data.token
+        localStorage.setItem('token', token)
+        this.setState({
+          'token': token
+        }, () => this.getData()) // передаем функцию внутрь чтобы она выполнилась после обновления состояния
+        //this.getData() // так будет работать на не большом приложении, когда предыдущая функция успевает обновлять состояние
+        console.log('get_token =', token)
+      })
+      .catch(
+        error => {
+          console.log('get_token_error =', error);
+          if (error == 'Error: Request failed with status code 401') {
+            this.setState({ 'token': '' });
+          }
+        }
+      )
+  }
+
+  logOut() {
+    localStorage.setItem('token', '')
+    this.setState({
+      'token': ''
+    }, () => this.getData())
+    console.log('logout token =', this.state.token)
+  }
+
+  componentDidMount() {
+    let token = localStorage.getItem('token')
+
+    this.setState({
+      'token': token
+    }, this.getData()) // передаем функцию внутрь чтобы она выполнилась после обновления состояния
+    console.log('componentDidMount, token=', token)
   }
 
   render() {
@@ -61,9 +124,13 @@ class App extends React.Component {
               <li><Link to='/'>Users</Link></li>
               <li><Link to='/projects'>Projects</Link></li>
               <li><Link to='/todos'>Todos</Link></li>
+              <li>
+                {this.isAuth() ? <button onClick={() => this.logOut()}>Logout</button> : <Link to='/login'>Login</Link>}
+              </li>
             </nav><br></br>
             <Routes>
               <Route exact path='/' element={<UsersList users={this.state.users} />} />
+              <Route exact path='/login' element={<LoginForm get_token={(login, password) => this.get_token(login, password)} />} />
               <Route exact path='/projects' element={<ProjectsList projects={this.state.projects} />} />
               <Route path='/projects/:id' element={<ProjectDescr todos={this.state.todos} />} />
               <Route exact path='/todos' element={<TodosList todos={this.state.todos} />} />

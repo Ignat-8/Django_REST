@@ -19,7 +19,7 @@ const ProjectItem = ({ item }) => {
 
 const ProjectDescr = ({ todos }) => {
     var { id } = useParams()
-    var filteredProjects = todos.filter((item) => item['project'] == parseInt(id))
+    var filteredProjects = todos.filter((item) => item['project'] = parseInt(id))
 
     return (
         <table border="1">

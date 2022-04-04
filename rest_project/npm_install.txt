@@ -1,0 +1,20 @@
+# Переходим в папку с проектом, в которой находится manage.py. Установим модуль npx.
+node install -g npx
+
+# После успешной установки с помощью create-react-app создадим каркас нашего приложения
+npx create-react-app frontend
+
+# Чтобы запустить тестовый сервер, переходим в папку frontend
+npm run start
+
+# библиотека для отправки запросов с front-end на back-end
+npm install axios
+
+# Для добавления маршрутизации используем библиотеку react-router-dom
+npm install react-router-dom
+
+# Установим библиотеку universal-cookie для удобной работы с cookies
+npm install universal-cookie
+
+
+
