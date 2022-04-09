@@ -7,4 +7,4 @@ pip install django-cors-headers
 pip install requests
 pip install djangorestframework-simplejwt
 pip install mixer
-
+pip install -U drf-yasg
