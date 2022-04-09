@@ -35,11 +35,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles', # required for serving swagger ui's css/js files
+    'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'drf_yasg',
+    'graphene_django',
     'django_filters',
     'corsheaders',
     'library',
@@ -158,4 +159,8 @@ REST_FRAMEWORK = {
     # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning',
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.AcceptHeaderVersioning',
+}
+
+GRAPHENE = {
+    'SCHEMA': 'rest_project.schema.schema'
 }
