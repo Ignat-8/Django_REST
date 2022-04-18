@@ -16,5 +16,6 @@ npm install react-router-dom
 # Установим библиотеку universal-cookie для удобной работы с cookies
 npm install universal-cookie
 
-
+# Сборка frontend-части
+npm run build
 

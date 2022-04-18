@@ -22,7 +22,7 @@ class MyTodoModelSerializer(ModelSerializer):
 class ProjectModelSerializer(ModelSerializer):
     class Meta:
         model = Project
-        fields = ['id', 'name', 'link', 'users']
+        fields = ['id', 'name', 'link', 'users','is_active']
 
 
 class TodoModelSerializer(ModelSerializer):

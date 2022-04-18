@@ -99,7 +99,20 @@ class MyProjectViewSet(ListModelMixin, RetrieveModelMixin , UpdateModelMixin ,Cr
         project = get_object_or_404(Project, pk=pk)
         return Response({'project.name': project.name})
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.is_active = False
+        todo = Todo.objects.filter(project=instance.id)
+        for obj in todo:
+            obj.is_active = False # удаляем связанные с этим проектом todo
+            obj.save()
+        instance.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
+    
 # class TodoSetPagination(CursorPagination):
 #     page_size = 5
 #     ordering = '-project_id'

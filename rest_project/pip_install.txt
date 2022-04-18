@@ -8,3 +8,4 @@ pip install requests
 pip install djangorestframework-simplejwt
 pip install mixer
 pip install -U drf-yasg
+pip install graphene-django
