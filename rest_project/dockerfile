@@ -1,0 +1,12 @@
+FROM python:3.9.2
+
+RUN pip install --upgrade pip
+COPY ./authors ./authors
+COPY ./library ./library
+COPY ./rest_project ./rest_project
+COPY ./todo ./todo
+COPY ./users ./users
+COPY ./manage.py ./
+COPY ./requirements.txt ./
+RUN pip install -r requirements.txt
+RUN pip install gunicorn

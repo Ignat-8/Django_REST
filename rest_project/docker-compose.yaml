@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:13.5
+    privileged: true
+    restart: always
+    ports:
+      -  54326:5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminadmin
+      POSTGRES_DB: rest_project
+      DOCKER_HOST: localhost
+  
+  backend:
+    build: ./
+    privileged: true
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    command: bash -c "
+        python manage.py migrate &&
+        gunicorn rest_project.wsgi -b 0.0.0.0:8080
+      "
+    environment:
+      DJANGO_SETTINGS_MODULE: 'rest_project.settings.prod_int'
+
