@@ -14,7 +14,7 @@ services:
       DOCKER_HOST: localhost
   
   backend:
-    build: ./
+    build: ./backend
     privileged: true
     restart: always
     ports:
@@ -28,3 +28,19 @@ services:
     environment:
       DJANGO_SETTINGS_MODULE: 'rest_project.settings.prod_int'
 
+  nginx:
+    build: ./nginx
+    privileged: true
+    ports:
+      - 8000:80
+    depends_on:
+      - backend
+
+  frontend:
+    build: ./frontend
+    privileged: true
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+  
