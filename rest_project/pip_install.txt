@@ -9,3 +9,8 @@ pip install djangorestframework-simplejwt
 pip install mixer
 pip install -U drf-yasg
 pip install graphene-django
+pip install psycopg2-binary
+
+python3 manage.py runserver --settings=rest_project.settings.debug
+python3 manage.py runserver --settings=rest_project.settings.prod_ext
+
